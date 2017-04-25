@@ -1,0 +1,4 @@
+dev/
+train/
+__pycache__/
+*.pyc
