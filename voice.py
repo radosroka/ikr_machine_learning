@@ -17,14 +17,14 @@ for i in range(1, 32):
 	#plt.show()
 
 	# DELETE FIRST AND LAST 200 FRAMES
-	for j in range(0, 7):
+	for j in range(0, 6):
 		for k in range(0, 200):
 			train[i][j] = np.delete(train[i][j], (0), axis=0)
 		for k in range(0, 200):
 			train[i][j] = np.delete(train[i][j], (len(train[i][j])-1), axis=0)
 
 	# DELETE SILENCE frames
-	for j in range(0, 7):
+	for j in range(0, 6):
 		summ = 0
 		min_eng = train[i][j][0][0]
 		for k in range(0, len(train[i][j])):
@@ -84,13 +84,13 @@ for i in range(1, 32):
 
 	test = wav16khz2mfcc('dev/' + str(i)).values()
 
-	for j in range(0, 1):
+	for j in range(0, 2):
 		for k in range(0, 200):
 			test[j] = np.delete(test[j], (0), axis=0)
 		for k in range(0, 200):
 			test[j] = np.delete(test[j], (len(test[j])-1), axis=0)
 
-	for j in range(0, 1):
+	for j in range(0, 2):
 		summ = 0
 		min_eng = test[j][0][0]
 		for k in range(0, len(test[j])):
