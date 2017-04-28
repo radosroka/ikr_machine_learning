@@ -1,5 +1,5 @@
 from sklearn.decomposition import PCA
-from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt
 from ikrlib import png2fea
 import scipy.linalg
@@ -29,7 +29,7 @@ train_set_list = []
 test_set_names = []
 test_set_list = []
 
-num = 186
+num = 185
 
 img_counter = 0
 
@@ -117,11 +117,11 @@ test_vectors = pca.transform(test_matrix)
 #train_vectors = train_vectors.T[1:].T
 #test_vectors = test_vectors.T[1:].T
 
-clf = SVC(kernel="poly")
-clf.fit(train_vectors, train_set_names)
+lr = LogisticRegression(max_iter=1000)
+lr.fit(train_vectors, train_set_names)
 
-print clf.predict(test_vectors)
-print clf.score(test_vectors, test_set_names)
+print lr.predict(test_vectors)
+print lr.score(test_vectors, test_set_names)
 
 #clf.predict_proba(...)
 #clf.predictlog_proba(....)
