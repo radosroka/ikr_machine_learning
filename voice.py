@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from ikrlib import wav16khz2mfcc, logpdf_gauss, train_gauss, train_gmm, logpdf_gmm
+from glob import glob
 import scipy.linalg
 import numpy as np
 from numpy.random import randint
@@ -76,13 +77,28 @@ for i in range(1, 32):
 
 	for j in range(25):
 		[Ws[i], MUs[i], COVs[i], TTL] = train_gmm(train[i], Ws[i], MUs[i], COVs[i]);
-		print('Iteration:', j, ' Total log-likelihood:', TTL, 'for class ' + str(i))
+		#print('Iteration:', j, ' Total log-likelihood:', TTL, 'for class ' + str(i))
 
-
+final = ''
 score = []
-for i in range(1, 32):
+for i in range(1, 2):
 
-	test = wav16khz2mfcc('dev/' + str(i)).values()
+	
+
+	dir_test = 'dev/' + str(i)
+	dir_eval = 'eval/'
+
+	f = glob(dir_eval + '/*.wav')
+	for x in range (0, len(f)):
+		f[x] = f[x][:-4]
+		f[x] = f[x].replace('eval\\' , '')
+	
+
+		
+		
+	test = wav16khz2mfcc(dir_eval).values()
+	#test = wav16khz2mfcc(dir_test).values()
+
 
 	for j in range(0, len(test)):
 		for k in range(0, 200):
@@ -129,13 +145,34 @@ for i in range(1, 32):
 		for k in range(0, len(test[j])):
 			test[j][k][0] = test[j][k][0] - avg_eng
 
+	cnt = 0
+	
 	for tst in test:
-
+		
 		ll = []
 		for j in range(1, 32):
 			ll.append(sum(logpdf_gmm(tst, Ws[j], MUs[j], COVs[j])))
 
+		
+		final += str(f[cnt])
+		final += ' '
+		final += str(np.argmax(ll) +1)
+		final += ' '
+		for z in range(1,32):
+			final += str((sum(logpdf_gmm(tst, Ws[z], MUs[z], COVs[z]))))
+			final += ' '
+		
+		final += '\n'
 
-		score.append(i == (np.argmax(ll) + 1))
+		cnt = cnt +1
+		#score.append(i == (np.argmax(ll) + 1))
 
-print(np.average(score))
+		
+		
+
+output = 'output_voice'
+write = open(output , 'w')
+write.write(final)
+write.close()
+
+#print(np.average(score))
